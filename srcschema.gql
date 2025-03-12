@@ -1,0 +1,15 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ProductEntity {
+  id: Float!
+  description: String!
+  name: String!
+  longDescription: String!
+  categoryId: Float!
+}
+
+type Query {
+  post: [ProductEntity!]!
+}
