@@ -1,10 +1,10 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  RelationId,
 } from 'typeorm';
 import { IProduct } from '../interfaces/product.interface';
 import { CategoryEntity } from 'src/categories/entities/category.entity';
@@ -31,35 +31,25 @@ export class ProductEntity implements IProduct {
   @Field(() => String)
   longDescription: string;
 
-  // @ManyToOne(
-  //   () => ManufacturerEntity,
-  //   (manufacturer) => manufacturer.products,
-  //   {
-  //     cascade: true,
-  //     eager: true,
-  //   },
-  // )
-  // @JoinColumn({ name: 'manufacturerId' })
-  // @Field(() => ManufacturerEntity, { nullable: true })
-  // manufacturer: ManufacturerEntity;
+  @Column({ nullable: true })
+  customerPartId?: string;
 
-  @ManyToOne(() => ManufacturerEntity, {
-    cascade: true,
-    eager: true,
-  })
-  @JoinColumn({ name: 'manufacturerId' })
+  @ManyToOne(
+    () => ManufacturerEntity,
+    (manufacturer) => manufacturer.products,
+    { eager: true, nullable: true },
+  )
+  @Field(() => ManufacturerEntity, { nullable: true })
   manufacturer: ManufacturerEntity;
 
-  @RelationId((product: ProductEntity) => product.manufacturer)
-  @Field(() => Number)
-  manufacturerId: number;
+  @Column({ unique: true })
+  @Field(() => String)
+  manufacturerPartId: string;
 
-  @ManyToOne(() => CategoryEntity, { cascade: true, eager: true })
-  @JoinColumn({ name: 'categoryId' })
+  @ManyToOne(() => CategoryEntity, (category) => category.products, {
+    eager: true,
+    nullable: true,
+  })
   @Field(() => CategoryEntity, { nullable: true })
   category: CategoryEntity;
-
-  @RelationId((product: ProductEntity) => product.category)
-  @Field(() => Number)
-  categoryId: number;
 }

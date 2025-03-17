@@ -30,26 +30,24 @@ export class FilesService {
     categories.forEach((cat) => categoryMap.set(cat.name, cat.id));
 
     const manufacturerMap = await this.manufacturersService.createBulk(
-      parsedData.map((r) => ({ name: r.manufacturer_name }))
+      parsedData.map((r) => ({ name: r.manufacturer_name })),
     );
 
     const products: CreateProductDto[] = parsedData.map((r) => {
-      console.log(manufacturerMap.get(r.manufacturer_name))
+      console.log(manufacturerMap.get(r.manufacturer_name));
       return {
         id: +r.id,
         description: r.description,
         longDescription: r.long_description,
         name: r.name,
-        category: {
-          id: categoryMap.get(r.category),
-        },
-        manufacturerName: r.manufacturer_name,
-        manufacturerPartId: r.manufacturer_part_id,
-        manufacturerId: manufacturerMap.get(r.manufacturer_name),
-        manufacturer: {
-          id: manufacturerMap.get(r.manufacturer_name)
-        }
-      }
+        categoryId : categoryMap.get(r.category),
+        manufacturerId : manufacturerMap.get(r.manufacturer_name),
+        manufacturerPartId : r.manufacturer_part_id,
+        requestedUnitPrice : parseFloat(r.requested_unit_price),
+        unitOfMeasure : r.unit_of_measure,
+        unitQuantity : r.unit_quantity,
+        requestedQuantity : r.requested_quantity
+      };
     });
 
     await this.productsService.createBulk(products);

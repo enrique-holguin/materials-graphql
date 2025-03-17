@@ -21,12 +21,32 @@ export class ProductsService {
         .createQueryBuilder()
         .insert()
         .into(PRODUCT.tableName)
-        .values(batch)
+        .values(
+          batch.map((product) => ({
+            name: product.name,
+            description: product.description,
+            longDescription: product.longDescription,
+            category: { id: product.categoryId },
+            manufacturer: { id: product.manufacturerId },
+            manufacturerPartId: product.manufacturerPartId,
+            requestedUnitPrice: product.requestedUnitPrice,
+          })),
+        )
+        .orIgnore()
         .execute();
     }
   }
 
-  async findAll() : Promise<ProductEntity[]> {
-    return this.productsRepository.find()
+  async findAll(): Promise<ProductEntity[]> {
+    return this.productsRepository.find();
+  }
+
+  async findPagination(limit?: number, offset?: number) : Promise<ProductEntity[]> {
+    const query = this.productsRepository.createQueryBuilder(PRODUCT.tableName);
+
+    if (limit) query.take(limit);
+    if (offset) query.skip(offset);
+
+    return query.getMany();
   }
 }

@@ -2,9 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CategoryEntity {
+type ManufacturerEntity {
   id: Float!
   name: String!
+  products: ProductEntity
 }
 
 type ProductEntity {
@@ -12,11 +13,16 @@ type ProductEntity {
   description: String!
   name: String!
   longDescription: String!
-  manufacturerId: Float!
+  manufacturer: ManufacturerEntity
+  manufacturerPartId: String!
   category: CategoryEntity
-  categoryId: Float!
+}
+
+type CategoryEntity {
+  id: Float!
+  name: String!
 }
 
 type Query {
-  post: [ProductEntity!]!
+  products(limit: Int, offset: Int): [ProductEntity!]!
 }

@@ -7,6 +7,6 @@ import { ProductsModule } from 'src/products/products.module';
 @Module({
   imports: [TypeOrmModule.forFeature([ManufacturerEntity]), ProductsModule],
   providers: [ManufacturersService],
-  exports : [ManufacturersService]
+  exports: [ManufacturersService],
 })
 export class ManufacturersModule {}
