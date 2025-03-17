@@ -25,4 +25,8 @@ export class ProductsService {
         .execute();
     }
   }
+
+  async findAll() : Promise<ProductEntity[]> {
+    return this.productsRepository.find()
+  }
 }

@@ -7,12 +7,15 @@ import { CategoriesService } from 'src/categories/categories.service';
 import { CsvEntityDto } from './dto/csv.dto';
 import { ProductsService } from 'src/products/products.service';
 import { CreateProductDto } from 'src/products/dto/create-product.dto';
+import { ManufacturersService } from 'src/manufacturers/manufacturers.service';
+import { CreateManufacturerDto } from 'src/manufacturers/dto/create-manufacturer.dto';
 
 @Injectable()
 export class FilesService {
   constructor(
     private readonly categoriesService: CategoriesService,
     private readonly productsService: ProductsService,
+    private readonly manufacturersService: ManufacturersService,
   ) {}
 
   async parseCsv(file: Express.Multer.File) {
@@ -26,14 +29,28 @@ export class FilesService {
     const categories = await this.categoriesService.findAll();
     categories.forEach((cat) => categoryMap.set(cat.name, cat.id));
 
-    const products = parsedData.map((r) => ({
-      description: r.description,
-      longDescription: r.long_description,
-      name: r.name,
-      category : {
-        id: categoryMap.get(r.category)
+    const manufacturerMap = await this.manufacturersService.createBulk(
+      parsedData.map((r) => ({ name: r.manufacturer_name }))
+    );
+
+    const products: CreateProductDto[] = parsedData.map((r) => {
+      console.log(manufacturerMap.get(r.manufacturer_name))
+      return {
+        id: +r.id,
+        description: r.description,
+        longDescription: r.long_description,
+        name: r.name,
+        category: {
+          id: categoryMap.get(r.category),
+        },
+        manufacturerName: r.manufacturer_name,
+        manufacturerPartId: r.manufacturer_part_id,
+        manufacturerId: manufacturerMap.get(r.manufacturer_name),
+        manufacturer: {
+          id: manufacturerMap.get(r.manufacturer_name)
+        }
       }
-    }));
+    });
 
     await this.productsService.createBulk(products);
   }
@@ -59,6 +76,7 @@ export class FilesService {
         .on('error', reject);
     });
 
+    console.log(results[0]);
     return results;
   }
 

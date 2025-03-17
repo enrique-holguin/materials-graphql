@@ -2,11 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CategoryEntity {
+  id: Float!
+  name: String!
+}
+
 type ProductEntity {
   id: Float!
   description: String!
   name: String!
   longDescription: String!
+  manufacturerId: Float!
+  category: CategoryEntity
   categoryId: Float!
 }
 

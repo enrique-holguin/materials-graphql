@@ -1,6 +1,7 @@
 import { IsString, IsNumberString, IsOptional } from 'class-validator';
+import { ICsv } from '../interfaces/csv.interface';
 
-export class CsvEntityDto {
+export class CsvEntityDto implements ICsv{
   @IsNumberString()
   id: string;
 

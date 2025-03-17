@@ -9,6 +9,7 @@ import { configDB } from './database/config';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { join } from 'path';
+import { ManufacturersModule } from './manufacturers/manufacturers.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { join } from 'path';
     FilesModule,
     ProductsModule,
     CategoriesModule,
+    ManufacturersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
