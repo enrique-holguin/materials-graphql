@@ -1,0 +1,28 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ManufacturerEntity {
+  id: Float!
+  name: String!
+  products: ProductEntity
+}
+
+type ProductEntity {
+  id: Float!
+  description: String!
+  name: String!
+  longDescription: String!
+  manufacturer: ManufacturerEntity
+  manufacturerPartId: String!
+  category: CategoryEntity
+}
+
+type CategoryEntity {
+  id: Float!
+  name: String!
+}
+
+type Query {
+  products(limit: Int, offset: Int): [ProductEntity!]!
+}
